@@ -17,3 +17,24 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+# Support
+
+Support can be found in the [module documentation](https://www.drupal.org/docs/8/modules/one-time-password-sms)
+
+# Configuration
+
+## OTP SMS
+
+The module does not require any configuration at this time.
+
+## SMS Framework
+
+Make sure you have added phone number configuration for the user entity type.
+
+This can be done at _/admin/config/smsframework/phone_number_
+
+# Usage
+
+The [user guide](https://www.drupal.org/docs/8/modules/one-time-password-sms/user-guide)
+contains information on how to enable OTP per user.
