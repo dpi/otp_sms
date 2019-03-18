@@ -1,0 +1,7 @@
+otp_sms.settings:
+  type: config_object
+  label: 'OTP SMS settings'
+  mapping:
+    sms_lifetime:
+      type: integer
+      label: 'Lifetime of an SMS one-time password in seconds'

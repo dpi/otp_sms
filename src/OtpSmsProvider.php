@@ -2,6 +2,7 @@
 
 namespace Drupal\otp_sms;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Drupal\user\UserDataInterface;
@@ -28,6 +29,13 @@ class OtpSmsProvider implements OtpSmsProviderInterface {
   protected $userData;
 
   /**
+   * The config factory service.
+   *
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
+   */
+  protected $configFactory;
+
+  /**
    * Phone number provider.
    *
    * @var \Drupal\sms\Provider\PhoneNumberProviderInterface
@@ -41,12 +49,15 @@ class OtpSmsProvider implements OtpSmsProviderInterface {
    *   The request stack.
    * @param \Drupal\user\UserDataInterface $user_data
    *   The user data service.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory service.
    * @param \Drupal\sms\Provider\PhoneNumberProviderInterface $phone_number_provider
    *   The phone number provider.
    */
-  public function __construct(RequestStack $request_stack, UserDataInterface $user_data, PhoneNumberProviderInterface $phone_number_provider) {
+  public function __construct(RequestStack $request_stack, UserDataInterface $user_data, ConfigFactoryInterface $config_factory, PhoneNumberProviderInterface $phone_number_provider) {
     $this->requestStack = $request_stack;
     $this->userData = $user_data;
+    $this->configFactory = $config_factory;
     $this->phoneNumberProvider = $phone_number_provider;
   }
 
@@ -118,7 +129,7 @@ class OtpSmsProvider implements OtpSmsProviderInterface {
    *   Number of seconds to wait before sending a new SMS.
    */
   protected function getOtpSmsLifetime() {
-    return 3600;
+    return $this->configFactory->get('otp_sms.settings')->get('sms_lifetime');
   }
 
   /**
