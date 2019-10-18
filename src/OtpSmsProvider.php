@@ -83,6 +83,28 @@ class OtpSmsProvider implements OtpSmsProviderInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function resendLastOtpSms(AccountInterface $user) {
+    $time = $this->getLastOtpSms($user);
+    if (!$time) {
+      throw new \LogicException('You cannot resend last OTP sms to the user that never was sent an OTP sms.');
+    }
+
+    /** @var \Drupal\one_time_password\Plugin\Field\FieldType\ProvisioningUriItemList $otp_field */
+    $otp_field = $user->one_time_password;
+    $one_time_pass = $otp_field->getOneTimePassword();
+    $code = $one_time_pass->at($time);
+
+    $sms = (new SmsMessage())
+      ->setMessage(sprintf('Your two factor code is %s', $code))
+      ->setAutomated(FALSE);
+
+    $this->phoneNumberProvider
+      ->sendMessage($user, $sms);
+  }
+
+  /**
    * Get when a OTP SMS was last sent to a user.
    *
    * @param \Drupal\Core\Session\AccountInterface $user
